@@ -129,9 +129,9 @@ function task5_2(str) {
 function task6(arr1, arr2) {
     let result_arr = [...arr1]
     arr2.forEach(elem => {
-       if (arr1.indexOf(elem) === -1) {
-           result_arr.push(elem)
-       }
+        if (arr1.indexOf(elem) === -1) {
+            result_arr.push(elem)
+        }
     });
 
     return result_arr;
@@ -230,22 +230,39 @@ function task9(a, b, c, w, h) {
 //     \WebServers\home\testsite\www\myfile.txt'). Виділіть із цього рядка ім'я файлу
 // без розширення.
 
-// function task10() {
-//
-// }
-//
-// console.log(task10());
+function task10(fileName) {
+    return fileName.split(/[\\/]/).pop().split('.')[0];
+}
+
+// console.log(task10("\\WebServers\\home\\testsite\\www\\myfile.txt"));
+// console.log(task10("\\WebServers\\home\\testsite\\www\\myfile.dev.txt"));
 
 
 // Задача11
 // Дано два рядки. Чи можна перший рядок отримати з другого циклічним
 // зрушенням?
 
-// function task11() {
-//
-// }
-//
-// console.log(task11());
+function task11(str1, str2) {
+    if (str1.length !== str2.length) {
+        return false;
+    }
+
+    if (str1 === str2) {
+        return true
+    }
+
+    for (let i = 1; i < str1.length; i++) {
+        const shifted = str2.slice(i) + str2.slice(0, i);
+
+        if (shifted === str1) {
+            return true;
+        }
+    }
+    return false;
+}
+
+// console.log(task11("hello", "lohel"));
+// console.log(task11("hello", "1ohel"));
 
 
 // Задача12
@@ -255,11 +272,29 @@ function task9(a, b, c, w, h) {
 // з розгляду в масиві a ці елементи і продовжити вибір з елементів, що
 // залишилися.
 
-// function task12() {
-//
-// }
-//
-// console.log(task12());
+function task12(a) {
+    if (a.length % 2 === 1) {
+        console.log("Масив повинен складатися із 2n елементів.");
+        return;
+    }
+
+    const result = {
+        b: [],
+        c: []
+    }
+
+    a = a.sort((a, b) => {
+        return a - b;
+    });
+
+    for (let i = 0; i < a.length / 2; i++) {
+        result.b.push(a[i]);
+        result.c.push(a[i + 1]);
+    }
+    return result;
+}
+
+// console.log(task12([10, -90, 32, 4, 5, 10, 21, 21, 0, 2]));
 
 
 // Задача13
@@ -273,11 +308,41 @@ function task9(a, b, c, w, h) {
 // кількість символів у вихідному, то запустити функцію, що буде кожні 5
 // секунд в alert буде питати, чи потрібна нам допомога.
 
-// function task13() {
-//
-// }
-//
-// console.log(task13());
+function task13(str) {
+    let words = str.split(" ");
+
+    for (let i = 0; i < words.length; i++) {
+        if (i === 0) {
+            words[i] = words[i][0].toUpperCase() + words[i].slice(1).toLowerCase();
+        } else {
+            words[i] = words[i].toLowerCase();
+        }
+
+        if (words[i].startsWith("http://") || words[i].startsWith("https://")) {
+            words[i] = "[посилання заборонено]";
+        }
+
+        if (words[i].includes("@")) {
+            words[i] = "[контакти заборонені]";
+        }
+
+        if (words[i].length > 3 && /^\d+$/.test(words[i])) {
+            words.splice(i, 1);
+            i--;
+        }
+    }
+    let newString = words.join(" ");
+
+    if (newString.length > str.length) {
+        // Запустити функцію alert кожні 5 секунд
+        setInterval(() => {
+            alert("Вам потрібна допомога?");
+        }, 5000);
+    }
+    return newString;
+}
+
+// console.log(task13("теСтОвиЙ рядок. https://www 12324 test@emample.com тест2"));
 
 
 // Задача14
@@ -288,11 +353,36 @@ function task9(a, b, c, w, h) {
 // дотримується вивести цей текст на html – сторінку і заборонити користувачу
 // копіювати цей текст та перегляд коду сторінки.
 
-// function task14() {
-//
-// }
-//
-// console.log(task14());
+function task14(str) {
+    const openIndexes = [];
+    const closeIndexes = [];
+    for (let i = 0; i < str.length; i++) {
+        if (str[i] === '(') {
+            openIndexes.push(i);
+        } else if (str[i] === ')') {
+            closeIndexes.push(i);
+        }
+    }
+
+    if ((openIndexes.length !== closeIndexes.length) ||
+        (openIndexes[openIndexes.length - 1] > closeIndexes[closeIndexes.length - 1])) {
+        return false;
+    }
+
+    const elem = document.querySelector(".task-14");
+    elem.textContent = str;
+    elem.addEventListener('copy', event => {
+        event.preventDefault();
+    });
+    document.oncontextmenu = () => {
+        return false;
+    };
+    return true;
+}
+
+// console.log(task14("('test': ((1, 2), ('str': 1)))"));
+// console.log(task14("('test': ((1, 2), ('str': 1)"));
+// console.log(task14("('test': 1, 2), ('str': 1)))(("));
 
 
 // Задача15
@@ -301,10 +391,49 @@ function task9(a, b, c, w, h) {
 //     хоча б дві великі літери, не більше 5 цифр, будь-які дві цифри поспіль
 // неприпустимі.
 
-// function task15() {
-//
-// }
-//
+function task15() {
+    const digits = '0123456789';
+    const symbols = '!"#$%&\'()*+,-./:;<=>?@[\\]^`{|}~';
+    const lowercaseChars = 'abcdefghijklmnopqrstuvwxyz';
+    const uppercaseChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+
+    const minLength = 6;
+    const maxLength = 20;
+    const maxDigits = 5;
+
+    let resultPassword = '';
+    let digitsCount = 0;
+
+    const passwordLength = minLength + Math.floor(Math.random() * (maxLength - minLength + 1));
+
+    resultPassword += uppercaseChars[(Math.floor(Math.random() * uppercaseChars.length))];
+    resultPassword += uppercaseChars[(Math.floor(Math.random() * uppercaseChars.length))];
+    while (resultPassword.length < passwordLength) {
+        const charType = Math.floor(Math.random() * 5);
+
+        if (charType === 0 && resultPassword.indexOf('_') === -1) {
+            // add _
+            resultPassword += '_';
+        } else if (charType === 1 &&
+            digitsCount < maxDigits &&
+            isNaN(parseInt(resultPassword[resultPassword.length - 1]))) {
+            // add digits
+            resultPassword += digits[(Math.floor(Math.random() * digits.length))];
+            digitsCount++;
+        } else if (charType === 2) {
+            // add symbols
+            resultPassword += symbols[(Math.floor(Math.random() * symbols.length))];
+        } else if (charType === 3) {
+            // add uppercase characters
+            resultPassword += uppercaseChars[(Math.floor(Math.random() * uppercaseChars.length))];
+        } else {
+            // add lowercase characters
+            resultPassword += lowercaseChars[(Math.floor(Math.random() * lowercaseChars.length))];
+        }
+    }
+    return resultPassword;
+}
+
 // console.log(task15());
 
 
@@ -313,12 +442,28 @@ function task9(a, b, c, w, h) {
 //     найменший з тих, що залишилися - на останнє місце, наступний -
 // передостаннє і так далі - до середини масиву.
 
-// function task16() {
-//
-// }
-//
-// console.log(task16());
+function task16(arr) {
+    const array = [...arr]
+    let startIndex = 0;
+    let endIndex = array.length - 1;
+    const result = [];
 
+    for (let i = 0; i < arr.length; i++) {
+        let min = Math.min(...array);
+        array.splice(array.indexOf(min), 1);
+
+        if (i % 2 === 0) {
+            result[startIndex] = min;
+            startIndex++;
+        } else {
+            result[endIndex] = min;
+            endIndex--;
+        }
+    }
+    return result;
+}
+
+// console.log(task16([-1, -40, 3, 45, -100, 23, 5, 100, 0, 1, -900]));
 
 // Задача17
 // Напишіть функцію, яка приймає рядок та повертає новий рядок,
@@ -326,11 +471,29 @@ function task9(a, b, c, w, h) {
 // повинні йти раніше за символи з меншою частотою. Використовуйте методи
 // роботи з рядками, об'єктами та сортуванням для вирішення задачі.
 
-// function task17() {
-//
-// }
-//
-// console.log(task17());
+function task17(str) {
+    const countChar = {};
+    for (let char of str) {
+        countChar[char] = (countChar[char] || 0) + 1;
+    }
+
+    let sortableChars = [];
+    for (let key in countChar) {
+        sortableChars.push([key, countChar[key]]);
+    }
+    sortableChars.sort((a, b) => {
+        return b[1] - a[1];
+    });
+
+    let result = '';
+    sortableChars.forEach(char => {
+        result += char[0].repeat(char[1]);
+    })
+
+    return result;
+}
+
+// console.log(task17("abdabcd dbbaaaddd dd"));
 
 
 // Задача18
@@ -339,11 +502,21 @@ function task9(a, b, c, w, h) {
 // символи (без перепусток). Використовуйте методи роботи з рядками та
 // алгоритми пошуку для вирішення задачі.
 
-// function task18() {
-//
-// }
-//
-// console.log(task18());
+function task18(str1, str2) {
+    const maxSubstring = ['', 0]
+    for (let i = 0; i < str1.length; i++) {
+        for (let j = i + 1; j < str1.length + 1; j++) {
+            let sub = str1.slice(i, j);
+            if (str2.includes(sub) && maxSubstring[1] < sub.length) {
+                maxSubstring[0] = sub;
+                maxSubstring[1] = sub.length;
+            }
+        }
+    }
+    return maxSubstring[0];
+}
+
+// console.log(task18("ello, ;there is a", "Hello, there is a"));
 
 
 // Задача19
@@ -353,11 +526,32 @@ function task9(a, b, c, w, h) {
 // кількості позицій вперед в алфавіті. Використовуйте методи роботи з рядками
 // та масивами для вирішення задачі.
 
-// function task19() {
-//
-// }
-//
-// console.log(task19());
+function task19(str, shift) {
+    // працює лише із символами у таблиці ASCII
+    if (shift < 0) {
+        return task19(str, shift + 26);
+    }
+
+    let result = '';
+
+    for (let i = 0; i < str.length; i++) {
+        let letter = str[i];
+
+        if (letter.match(/[a-z]/i)) {
+            let code = str.charCodeAt(i);
+            if (code >= 65 && code <= 90) {
+                letter = String.fromCharCode(((code - 65 + shift) % 26) + 65);
+            } else if (code >= 97 && code <= 122) {
+                letter = String.fromCharCode(((code - 97 + shift) % 26) + 97);
+            }
+        }
+        result += letter;
+    }
+    return result;
+}
+
+// console.log(task19("Hello", 31));
+// console.log(task19("Mjqqt", -31));
 
 
 // Задача20
@@ -366,11 +560,16 @@ function task9(a, b, c, w, h) {
 // повинна повернути true, якщо рядки є анаграмами, і false інакше.
 //     Використовуйте методи роботи з рядками для вирішення задачі.
 
-// function task20() {
-//
-// }
-//
-// console.log(task20());
+function task20(str1, str2) {
+    let str1Chars = str1.replace(' ', '').split('');
+    let str2Chars = str2.replace(' ', '').split('');
+    str1Chars.sort();
+    str2Chars.sort();
+    return str1Chars.join('') === str2Chars.join('');
+}
+
+// console.log(task20("horse", "shore"));
+// console.log(task20("listen", "silent"));
 
 
 // Задача21
@@ -380,21 +579,117 @@ function task9(a, b, c, w, h) {
 // також функцію, яка дає змогу отримати список студентів певного факультету.
 //     Використовуйте об'єкти та їх методи для вирішення задачі.
 
-// function task21() {
-//
-// }
-//
-// console.log(task21());
+const university = {
+    students: [],
+
+    addStudent: function (student) {
+        this.students.push(student);
+    },
+    removeStudent: function (studentId) {
+        this.students = this.students.filter(student => {
+            return studentId !== student.id;
+        });
+    },
+    getStudentById: function (studentId) {
+        let student = this.students.filter(student => {
+           return studentId === student.id
+        });
+        if (student) {
+            return student;
+        }
+        return;
+    },
+    getStudentsListByCourse: function (course) {
+        return this.students.filter(student => {
+            return course === student.course;
+        });
+    },
+    getStudentsListByFaculty: function (faculty) {
+        return this.students.filter(student => {
+            return faculty === student.faculty;
+        });
+    },
+};
+
+// university.addStudent({
+//     id: 1,
+//     name: "John",
+//     course: 3,
+//     faculty: "ABCD",
+//     age: 150
+// });
+// university.addStudent({
+//     id: 2,
+//     name: "Ann",
+//     course: 1,
+//     faculty: "ABCD",
+//     age: 35
+// });
+// university.addStudent({
+//     id: 3,
+//     name: "Tom",
+//     course: 3,
+//     faculty: "DCBA",
+//     age: 50
+// });
+// console.log(university.getStudentsListByFaculty("ABCD"));
+// console.log(university.getStudentsListByCourse(3));
+// console.log(university.getStudentById(3));
+// university.removeStudent(3);
+// console.log(university);
 
 
 // Задача22
 // Напишіть програму, яка аналізує текст та виводить статистику про
-// кількість слів, речень та символів у тексті. Реалізуйте також функцію, яка
+// кількість слів, речень та символів у тексті.
+function task22_1(text) {
+    const result = {
+        words: text.split(" ").length,
+        sentences: text.split(/[.!?]/).filter(sentence => {
+            return sentence !== '';
+        }).length,
+        symbols: text.length,
+    }
+    return `Кількість слів у тексті: ${result.words}\n` +
+           `Кількість речень у тексті: ${result.sentences}\n` +
+           `Кількість символів у тексті: ${result.symbols}`;
+}
+
+// console.log(task22_1("Напишіть програму, яка аналізує текст та виводить статистику про " +
+//     "кількість слів, речень та символів у тексті. Речення 2! Речення3? Речення 4"));
+
+// Реалізуйте також функцію, яка
 // визначає слова, що найчастіше зустрічаються в тексті. Використовуйте
 // методи роботи з рядками, регулярні вирази та об'єкти для вирішення задачі.
 
-// function task22() {
-//
-// }
-//
-// console.log(task22());
+function task22_2(text) {
+    let words = text.split(" ").filter(word => {
+        return word !== '';
+    });
+
+    words = words.map(word => {
+       return word.replace(/[.,;!?]/g, '');
+    });
+
+    const wordsLength = {};
+    words.forEach(word => {
+        wordsLength[word] = (wordsLength[word] || 0) + 1;
+    });
+
+    let result = [];
+    for (let key in wordsLength) {
+        result.push([key, wordsLength[key]]);
+    }
+    result.sort((a, b) => {
+        return b[1] - a[1];
+    });
+
+    let resultString = "Слова, які найчастіше зустрічаються в тексті:\n";
+    result.forEach(pair => {
+       resultString += `${pair[0]}: ${pair[1]}\n`;
+    });
+
+    return resultString;
+}
+
+console.log(task22_2("тест, тест 2. Розробка, програма, 111 2 2 2 2 0"));
