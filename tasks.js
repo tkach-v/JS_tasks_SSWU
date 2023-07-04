@@ -7,31 +7,29 @@
 // arr([1, 2, 3, -4]); // вернет 7, потому что: 3 - (-4) == 7
 // arr([16]) => 0
 
-
 function task1(arr) {
+    if (!Array.isArray(arr)) {
+        throw "Аргумент повинен бути масивом";
+    }
     return Math.max(...arr) - Math.min(...arr);
 }
 
 // console.log(task1([1, 2, 3, -4]))
-// console.log(task1([16]))
+// console.log(task1(16))
 
 
 // Задача2
 // Напишіть функцію, яка приймає рядок і число. Поверніть у вигляді
 // масиву тільки ті слова, довжина яких перевищує число.
 
-
 function task2(str, num) {
-    let result = [];
-    let words = str.split(/[\s,!.?—]+/).filter(Boolean);
+    if (typeof str !== 'string' || typeof num !== 'number') {
+        throw "Функція може приймати лише рядок та число";
+    }
 
-    words.forEach(word => {
-        if (word.length > num) {
-            result.push(word);
-        }
-    })
-
-    return result;
+    return str.split(/[\s,!.?—]+/).filter(Boolean).filter(word => {
+        return word.length > num;
+    });
 }
 
 // console.log(task2("Hello world, test string. Back-end. Привіт — це.", 5));
@@ -45,10 +43,13 @@ function task2(str, num) {
 // solution('abc', 'd') => false
 
 function task3(str1, str2) {
+    if (typeof str1 !== 'string' || typeof str2 !== 'string') {
+        throw "Функція може приймати лише 2 рядки";
+    }
     return str1.endsWith(str2);
 }
 
-// console.log(task3('abc', 'd'));
+// console.log(task3('abc', 'bc'));
 
 
 // Задача 4
@@ -60,11 +61,13 @@ function task3(str1, str2) {
 //
 
 function task4(arr) {
+    if (typeof arr !== 'object') {
+        throw "Функція може приймати лише масив";
+    }
     let result = [];
     for (let i = 0; i < arr.length - 1; i++) {
         result.push((arr[i] + arr[i + 1]) / 2);
     }
-
     return result;
 }
 
@@ -80,6 +83,9 @@ function task4(arr) {
 // countVowels("Palm") ➞ 1
 
 function task5_1(str) {
+    if (typeof str !== 'string') {
+        throw "Функція може приймати лише рядок";
+    }
     const vowels = ['a', 'e', 'i', 'o', 'u'];
 
     return str.split('').filter(elem => vowels.indexOf(elem.toLowerCase()) !== -1).length;
@@ -97,6 +103,10 @@ function task5_1(str) {
 // removeABC("hello world!") ➞ null
 
 function task5_2(str) {
+    if (typeof str !== 'string') {
+        throw "Функція може приймати лише рядок";
+    }
+
     const letters = ['a', 'b', 'c'];
     let changed = false;
     const str_arr = str.split('');
@@ -107,12 +117,10 @@ function task5_2(str) {
         }
     }
 
-    let result = str_arr.join('');
-
-    if (changed) {
-        return result;
+    if (!changed) {
+        return null;
     }
-    return null;
+    return str_arr.join('');
 }
 
 // console.log(task5_2("This might be a bit hard"));
@@ -127,13 +135,15 @@ function task5_2(str) {
 // ["1", "2", "3", "10", "100"]
 
 function task6(arr1, arr2) {
+    if (typeof arr1 !== 'object' || typeof arr2 !== 'object') {
+        throw "Функція може приймати лише 2 масиви";
+    }
     let result_arr = [...arr1]
     arr2.forEach(elem => {
         if (arr1.indexOf(elem) === -1) {
             result_arr.push(elem)
         }
     });
-
     return result_arr;
 }
 
@@ -147,6 +157,10 @@ function task6(arr1, arr2) {
 // вихід - {"#FF0000":"red","#00FF00":"green","#FFFFFF":"white"}
 
 function task7(colors) {
+    if (typeof colors !== 'object') {
+        throw "Функція може приймати лише об'єкт";
+    }
+
     let keys = Object.keys(colors);
     let values = Object.values(colors);
     let result = {};
@@ -172,9 +186,12 @@ function task7(colors) {
 // завжди повинна бути більшою за страховку.
 
 function task8(stolenThings, insuranceValue) {
+    if (typeof stolenThings !== 'object' || typeof insuranceValue !== 'number') {
+        throw "Функція може приймати лише об'єкт та число";
+    }
+
     if (Object.keys(stolenThings).length === 0) {
-        console.log("Об'єкт завжди повинен містити елементи.")
-        return
+        throw "Об'єкт завжди повинен містити елементи"
     }
 
     let stolenSum = Object.values(stolenThings).reduce((accumulator, currentValue) => accumulator + currentValue, 0);
@@ -206,6 +223,14 @@ function task8(stolenThings, insuranceValue) {
 // Цегла не можна класти під неортогональним кутом.
 
 function task9(a, b, c, w, h) {
+    if (typeof a !== 'number' ||
+        typeof b !== 'number' ||
+        typeof c !== 'number' ||
+        typeof w !== 'number' ||
+        typeof h !== 'number') {
+        throw "Функція може приймати лише 5 чисел";
+    }
+
     let brickSides = [
         [a, b],
         [a, c],
@@ -231,6 +256,9 @@ function task9(a, b, c, w, h) {
 // без розширення.
 
 function task10(fileName) {
+    if (typeof fileName !== 'string') {
+        throw "Функція може приймати лише рядок";
+    }
     return fileName.split(/[\\/]/).pop().split('.')[0];
 }
 
@@ -243,6 +271,10 @@ function task10(fileName) {
 // зрушенням?
 
 function task11(str1, str2) {
+    if (typeof str1 !== 'string' || typeof str2 !== 'string') {
+        throw "Функція може приймати лише 2 рядки";
+    }
+
     if (str1.length !== str2.length) {
         return false;
     }
@@ -273,9 +305,12 @@ function task11(str1, str2) {
 // залишилися.
 
 function task12(a) {
+    if (typeof a !== 'object') {
+        throw "Функція може приймати лише масив";
+    }
+
     if (a.length % 2 === 1) {
-        console.log("Масив повинен складатися із 2n елементів.");
-        return;
+        throw "Масив повинен складатися із 2n елементів";
     }
 
     const result = {
@@ -309,6 +344,10 @@ function task12(a) {
 // секунд в alert буде питати, чи потрібна нам допомога.
 
 function task13(str) {
+    if (typeof str !== 'string') {
+        throw "Функція може приймати лише рядок";
+    }
+
     let words = str.split(" ");
 
     for (let i = 0; i < words.length; i++) {
@@ -354,6 +393,9 @@ function task13(str) {
 // копіювати цей текст та перегляд коду сторінки.
 
 function task14(str) {
+    if (typeof str !== 'string') {
+        throw "Функція може приймати лише рядок";
+    }
     const openIndexes = [];
     const closeIndexes = [];
     for (let i = 0; i < str.length; i++) {
@@ -443,6 +485,9 @@ function task15() {
 // передостаннє і так далі - до середини масиву.
 
 function task16(arr) {
+    if (typeof arr !== 'object') {
+        throw "Функція може приймати лише масив";
+    }
     const array = [...arr]
     let startIndex = 0;
     let endIndex = array.length - 1;
@@ -472,6 +517,9 @@ function task16(arr) {
 // роботи з рядками, об'єктами та сортуванням для вирішення задачі.
 
 function task17(str) {
+    if (typeof str !== 'string') {
+        throw "Функція може приймати лише рядок";
+    }
     const countChar = {};
     for (let char of str) {
         countChar[char] = (countChar[char] || 0) + 1;
@@ -489,7 +537,6 @@ function task17(str) {
     sortableChars.forEach(char => {
         result += char[0].repeat(char[1]);
     })
-
     return result;
 }
 
@@ -503,7 +550,10 @@ function task17(str) {
 // алгоритми пошуку для вирішення задачі.
 
 function task18(str1, str2) {
-    const maxSubstring = ['', 0]
+    if (typeof str1 !== 'string' || typeof str2 !== 'string') {
+        throw "Функція може приймати лише 2 рядки";
+    }
+    const maxSubstring = ['', 0];
     for (let i = 0; i < str1.length; i++) {
         for (let j = i + 1; j < str1.length + 1; j++) {
             let sub = str1.slice(i, j);
@@ -528,12 +578,16 @@ function task18(str1, str2) {
 
 function task19(str, shift) {
     // працює лише із символами у таблиці ASCII
+
+    if (typeof str !== 'string' || typeof shift !== 'number') {
+        throw "Функція може приймати лише рядок та число";
+    }
+
     if (shift < 0) {
         return task19(str, shift + 26);
     }
 
     let result = '';
-
     for (let i = 0; i < str.length; i++) {
         let letter = str[i];
 
@@ -561,6 +615,10 @@ function task19(str, shift) {
 //     Використовуйте методи роботи з рядками для вирішення задачі.
 
 function task20(str1, str2) {
+    if (typeof str1 !== 'string' || typeof str2 !== 'string') {
+        throw "Функція може приймати лише 2 рядки";
+    }
+
     let str1Chars = str1.replace(' ', '').split('');
     let str2Chars = str2.replace(' ', '').split('');
     str1Chars.sort();
@@ -592,7 +650,7 @@ const university = {
     },
     getStudentById: function (studentId) {
         let student = this.students.filter(student => {
-           return studentId === student.id
+            return studentId === student.id
         });
         if (student) {
             return student;
@@ -643,6 +701,10 @@ const university = {
 // Напишіть програму, яка аналізує текст та виводить статистику про
 // кількість слів, речень та символів у тексті.
 function task22_1(text) {
+    if (typeof text !== 'string') {
+        throw "Функція може приймати лише рядок";
+    }
+
     const result = {
         words: text.split(" ").length,
         sentences: text.split(/[.!?]/).filter(sentence => {
@@ -651,8 +713,8 @@ function task22_1(text) {
         symbols: text.length,
     }
     return `Кількість слів у тексті: ${result.words}\n` +
-           `Кількість речень у тексті: ${result.sentences}\n` +
-           `Кількість символів у тексті: ${result.symbols}`;
+        `Кількість речень у тексті: ${result.sentences}\n` +
+        `Кількість символів у тексті: ${result.symbols}`;
 }
 
 // console.log(task22_1("Напишіть програму, яка аналізує текст та виводить статистику про " +
@@ -663,12 +725,16 @@ function task22_1(text) {
 // методи роботи з рядками, регулярні вирази та об'єкти для вирішення задачі.
 
 function task22_2(text) {
+    if (typeof text !== 'string') {
+        throw "Функція може приймати лише рядок";
+    }
+
     let words = text.split(" ").filter(word => {
         return word !== '';
     });
 
     words = words.map(word => {
-       return word.replace(/[.,;!?]/g, '');
+        return word.replace(/[.,;!?]/g, '');
     });
 
     const wordsLength = {};
@@ -686,10 +752,10 @@ function task22_2(text) {
 
     let resultString = "Слова, які найчастіше зустрічаються в тексті:\n";
     result.forEach(pair => {
-       resultString += `${pair[0]}: ${pair[1]}\n`;
+        resultString += `${pair[0]}: ${pair[1]}\n`;
     });
 
     return resultString;
 }
 
-console.log(task22_2("тест, тест 2. Розробка, програма, 111 2 2 2 2 0"));
+// console.log(task22_2("тест, тест 2. Розробка, програма, 111 2 2 2 2 0"));
