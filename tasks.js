@@ -61,7 +61,7 @@ function task3(str1, str2) {
 //
 
 function task4(arr) {
-    if (typeof arr !== 'object') {
+    if (!Array.isArray(arr)) {
         throw "Функція може приймати лише масив";
     }
     let result = [];
@@ -135,7 +135,7 @@ function task5_2(str) {
 // ["1", "2", "3", "10", "100"]
 
 function task6(arr1, arr2) {
-    if (typeof arr1 !== 'object' || typeof arr2 !== 'object') {
+    if (!Array.isArray(arr1) || !Array.isArray(arr2)) {
         throw "Функція може приймати лише 2 масиви";
     }
     let result_arr = [...arr1]
@@ -305,7 +305,7 @@ function task11(str1, str2) {
 // залишилися.
 
 function task12(a) {
-    if (typeof a !== 'object') {
+    if (!Array.isArray(a)) {
         throw "Функція може приймати лише масив";
     }
 
@@ -485,7 +485,7 @@ function task15() {
 // передостаннє і так далі - до середини масиву.
 
 function task16(arr) {
-    if (typeof arr !== 'object') {
+    if (!Array.isArray(arr)) {
         throw "Функція може приймати лише масив";
     }
     const array = [...arr]
